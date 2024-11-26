@@ -18,7 +18,12 @@ Samples are: DGC-R-7-kidney_R1_001.fastq.gz, DGC-R-7-kidney_R2_001.fastq.gz, DGC
 I am following the steps mentioned in: https://github.com/harvardinformatics/TranscriptomeAssemblyTools/tree/master and https://www.notion.so/RNA-seq-data-processing-cc1fcd681bf040bcb181ee9f68744d9a which are the following:
 
 1. run **fastqc** on raw fastq reads to identify potential issues with Illumina sequencing libraries such as retained adapter, over-represented (often low complexity) sequences, greater than expected decrease in base quality with read cycle.
-2. 
+2. perform kmer-based read corrections with with [rCorrector](https://github.com/mourisl/Rcorrector/tree/master), see [Song and Florea 2015, Gigascience](https://gigascience.biomedcentral.com/articles/10.1186/s13742-015-0089-y)
+3. remove read pairs where at least one read has been flagged by rCorrector as containing an erroneous kmer, and where it was not possible to correct the errors computationally
+4. remove read pairs where at least read contains an over-represented sequence
+5. perform high quality trimming with trimmomatic
+6. assemble reads with trinnity
+
 
 ### 1. Fastqc
 
@@ -61,3 +66,19 @@ fastqc /home/dgarcia/nas5/rna/DGC-R-7-kidney_R1_001.fastq.gz \
 -o /home/dgarcia/nas5/rna/fastqc
 
 ```
+The results for the fastqc analysis of both the liver and kidney of *Helicops angulatus* seem to be of good quality. I am only observing possible problems in the: 
+
+1) Sequence Duplication Levels:
+<img width="899" alt="Screenshot 2024-11-26 at 10 48 07 AM" src="https://github.com/user-attachments/assets/8b23d1ab-b353-4b61-9942-c577269d0a7e">
+
+2) Adaptor content: ~20% of the Illumina Universal Adapter
+
+
+### 2. kmer-based read corrections with rCorrector
+
+See https://github.com/harvardinformatics/TranscriptomeAssemblyTools/tree/master and https://gigascience.biomedcentral.com/articles/10.1186/s13742-015-0089-y for original details on how this correcting step works. 
+
+
+
+
+
