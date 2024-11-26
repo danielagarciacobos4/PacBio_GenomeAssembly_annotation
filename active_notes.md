@@ -38,11 +38,26 @@ I run these analyses in the Huxley cluster of AMNH using a PBS script. Personal 
 
 module load fastqc-0.11.9
 
-fastqc /home/dgarcia/nas5/rna/DGC-R-7-kidney_R1_001.fastq.gz \
-/home/dgarcia/nas5/rna/DGC-R-7-kidney_R2_001.fastq.gz \ 
-/home/dgarcia/nas5/rna/DGC-R-7-liver_R1_001.fastq.gz \
+fastqc /home/dgarcia/nas5/rna/DGC-R-7-liver_R1_001.fastq.gz \
 /home/dgarcia/nas5/rna/DGC-R-7-liver_R2_001.fastq.gz \
 -o /home/dgarcia/nas5/rna/fastqc
 ```
+And now the script for the kidney samples. For some reason, I was not able to run the fastqc of the 2 samples (liver and kidney) in the same script. This is some troubleshooting I must due to not have to run the same script mutiple times. 
 
+```
+#PBS -N fastqc_rna
+#PBS -q batch
+#PBS -m abe
+#PBS -M dgarcia@amnh.org
+#PBS -e /home/dgarcia/nas5/rna/fastqc
+#PBS -o /home/dgarcia/nas5/rna/fastqc
+#PBS -l nodes=1:ppn=28
+#PBS -l walltime=40:00:00
 
+module load fastqc-0.11.9
+
+fastqc /home/dgarcia/nas5/rna/DGC-R-7-kidney_R1_001.fastq.gz \
+/home/dgarcia/nas5/rna/DGC-R-7-kidney_R2_001.fastq.gz \
+-o /home/dgarcia/nas5/rna/fastqc
+
+```
