@@ -3,14 +3,17 @@
 The following pipeline will show the scripts and results obtained from a PacBio (SMRT CELL) genome assembly and RNA seq annotation for the South American aquatic snake *Helicops angulatus*. Depending of the resources and cluster capacity needed, some scripts are in the HUXLEY cluster (PBS scripting) and others are in the MENDEL cluster (SLURM- BATCH). 
 
 # 1. Genome assembly
-I sequenced the genome of Helicops angulatus from Orinoquia, Colombia. The tissue corresponds 
+
+I sequenced the genome of *Helicops angulatus* from Orinoquia, Colombia. This corresponds to a liver sample collected in 2022 and preserved in ethanol at 96% (IAvH-CT, Instituto Alexander von Humboldt in Colombia). DNA extractions were made with a kit for high molecular-weight samples. The overall steps I did to check for the quality check of the reads and genome assembly are as follows: 
+
+1) kmer analysis of raw reads: Quality check of the raw reads
+2) Hifiasm to assemble the genome (purging?)
+3) Busco analysis to check for completeness of the genome. Quality check of the assembly
+4) *Merqury (I have not done this yet). Quality check of the assembly*
+
+## 1.1 kmer analysis for raw reads
 
 
-Need to update everything I have done so far: 
-- kmer analysis of raw reads: Quality check of the raw reads
-- Hifiasm to assemble the genome (purging?)
-- Busco analysis to check for completeness of the genome. Quality check of the assembly
-- *Merqury (I have not done this yet). Quality check of the assembly*
 
 # 2. Annotation: 
 
@@ -34,7 +37,7 @@ I am following the steps mentioned in: https://github.com/harvardinformatics/Tra
 5. perform high quality trimming with trimmomatic
 6. assemble reads with [trinity](https://github.com/trinityrnaseq/trinityrnaseq)
 
-I am running one script with PBS_ARRAY_INDEX that allows to run a large collection of PBS runs to be executed in one script. This is specified in the PBS -J 1-2 and with the ${PBS_ARRAY_INDEX}. This first script runs from step 1-5 in the above description (meaning trimming is not ran yet)
+I am running one script with PBS_ARRAY_INDEX that allows to run a large collection of PBS runs to be executed in one script. This is specified in the PBS -J 1-2 and with the ${PBS_ARRAY_INDEX}. This first script runs from step 1-5 in the above description (meaning trnity is not ran yet)
 
 
 ## 2.1 Script: Steps 1-5 (fastqc, Rcorrector and trimmomatic)
