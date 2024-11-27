@@ -112,7 +112,7 @@ fi
 **3) correct other reads, python file from the github mentioned above:**
 - This step further corrects RNA reads. The results of this correction is a two file starting with the word unfixrm (e.g. unfixrm_kidney_Helicops_angulatus_IAvH-CT-36861_R2_001.cor.fq.gz). One for R1 and R2.
   
-**#4. Trim reads**
+**4) Trim reads**
 - This step trims the adaptors from library prep. After trimming adaptors I am left with paired reads of ~ 1 GB. This is very low-coverage reads, but this is the outcome of the initial sequencing resources requested (remember that the initial file is around ~1.5 GB - before running rcorrector).
 - After running this step I am left with reverse paired, reverse unpaired, foward paired and foward unpaired file.
 
