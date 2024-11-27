@@ -18,7 +18,12 @@ Earl Grey: soft masking of the genome. This is a needed step for genome annotati
 
 I have obtained RNA seq data from Illumina of two tissue samples: liver and kidney. Unfortunately, these samples are not from the same individual I used for the PacBio genome. However, it is an individual from the same species (*Helicops angulatus*) and same population (Orinoquian region - Meta, Colombia).
 
-Samples are: DGC-R-7-kidney_R1_001.fastq.gz, DGC-R-7-kidney_R2_001.fastq.gz, DGC-R-7-liver_R1_001.fastq.gz, DGC-R-7-liver_R2_001.fastq.gz and they each have a size of **~ 1.5GB**
+Samples are: 
+- DGC-R-7-kidney_R1_001.fastq.gz,
+- DGC-R-7-kidney_R2_001.fastq.gz,
+- DGC-R-7-liver_R1_001.fastq.gz,
+- DGC-R-7-liver_R2_001.fastq.gz  
+- They each has a size of **~ 1.5GB**
 
 I am following the steps mentioned in: https://github.com/harvardinformatics/TranscriptomeAssemblyTools/tree/master and https://www.notion.so/RNA-seq-data-processing-cc1fcd681bf040bcb181ee9f68744d9a which are the following:
 
