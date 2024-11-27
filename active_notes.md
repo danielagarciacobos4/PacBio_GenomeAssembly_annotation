@@ -11,7 +11,11 @@ I sequenced the genome of *Helicops angulatus* from Orinoquia, Colombia. This co
 3) Busco analysis to check for completeness of the genome. Quality check of the assembly
 4) *Merqury (I have not done this yet). Quality check of the assembly*
 
-## 1.1 kmer analysis for raw reads
+## 1.1 kmer analysis using jellyfish for raw reads [see](https://github.com/gmarcais/Jellyfish) 
+- path to the analysis: /home/dgarcia/nas5/PacBio
+- D6C18_Helicops_angulatus.hifireads.fastq.gz corresponds to the file with the raw reads.
+- Jellyfish is a tool for fast, memory-efficient counting of k-mers in DNA. A k-mer is a substring of length k, and counting the occurrences of all such substrings is a central step in many analyses of DNA sequences.
+- It outputs its k-mer counts in a binary format, which can be translated into a human-readable text format using the "jellyfish dump" command, or queried for specific k-mers with "jellyfish query". See the documentation for details.
 
 
 
