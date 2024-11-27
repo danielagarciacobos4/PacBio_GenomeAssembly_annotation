@@ -1,5 +1,8 @@
 # Genome Assembly with PacBio
 
+The following pipeline will show the scripts and results obtained from a PacBio (SMRT CELL) genome assembly and RNA seq annotation for the South American aquatic snake *Helicops angulatus*. Depending of the resources and cluster capacity needed, some scripts are in the HUXLEY cluster (PBS scripting) and others are in the MENDEL cluster (SLURM- BATCH). 
+
+
 Need to update everything I have done so far: 
 - kmer analysis of raw reads: Quality check of the raw reads
 - Hifiasm to assemble the genome (purging?)
@@ -147,7 +150,11 @@ mkdir trimmed_trinity_${dir}
 cd trimmed_trinity_${dir}
 #make sure max mem matches mem allocation up top
 Trinity --full_cleanup --seqType fq --left $R1 --right $R2 --CPU ${OMP_NUM_THREADS} --max_memory 100G --output trimmed_trinity_${dir}
-'''
+```
+## Results: Steps 6 (Trinity)
+- approximate time to obtain results of 2 tissues ~ 1.5 GB (bad coverage) - started Nov 27 at 2:00 pm finished...
+
+
 
 
 
