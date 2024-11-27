@@ -22,7 +22,7 @@ I am following the steps mentioned in: https://github.com/harvardinformatics/Tra
 3. remove read pairs where at least one read has been flagged by rCorrector as containing an erroneous kmer, and where it was not possible to correct the errors computationally
 4. remove read pairs where at least read contains an over-represented sequence
 5. perform high quality trimming with trimmomatic
-6. assemble reads with trinity
+6. assemble reads with [trinity](https://github.com/trinityrnaseq/trinityrnaseq)
 
 I am running one script with PBS_ARRAY_INDEX that allows to run a large collection of PBS runs to be executed in one script. This is specified in the PBS -J 1-2 and with the ${PBS_ARRAY_INDEX}. This first script runs from step 1-5 in the above description (meaning trimming is not ran yet)
 
@@ -46,17 +46,15 @@ I run these analyses in the Huxley cluster of AMNH using a PBS script. Personal 
 #READ PROCESSING
 source ~/.bash_profile
 export PATH=/home/dgarcia/nas4/bin/miniconda3/bin:$PATH
-export OMP_NUM_THREADS=8
-conda activate prepRNA #trimmomatic and rcorrector
+export OMP_NUM_THREADS=8 #we are using 8 threads, 8 cpus
+conda activate prepRNA #upload trimmomatic and rcorrector since the rest of the packages are available in the Huxley cluster of AMNH.
 module load fastqc-0.11.9 perl-5.26.0 jre-1.8.0_251 Trinity-2.12.0 jellyfish-2.3.0 bowtie2-2.3.5.1
 
-# indicating the working directory
 wd=/home/dgarcia/nas5/rna
-#changing to the working directory
 cd ${wd}
-#this file text has the names of the folder where I have the R1 and R2 fastq files of raw reads
+# The following file text has the names of the folder where I have the R1 and R2 fastq files of raw reads
 directories_file=directories.txt
-#PBS_ARRAY_INDEX allow a large collection of PBS runs to be executed in one script. This is specified in the PBS -J 11-13
+#PBS_ARRAY_INDEX allows a large collection of PBS runs to be executed in one script. This is specified in the PBS -J 1-2
 dir=$(sed -n "${PBS_ARRAY_INDEX}p" "$directories_file")
 
 echo ${PBS_ARRAY_INDEX}
@@ -65,11 +63,11 @@ R1=/home/dgarcia/nas5/rna/raw_reads/${dir}/*R1*
 R2=/home/dgarcia/nas5/rna/raw_reads/${dir}/*R2*
 
 echo $OMP_NUM_THREADS
-##1. fastqc
+##1. fastqc; make a fastqc folder in my wd before running this command
 
 fastqc -o fastqc $R1 $R2 -t ${OMP_NUM_THREADS}
 
-#2. kmer read corrections
+#2. kmer read corrections; make a folder name rcorrected before running this command. This perl script is purging and if possible fixing bad quality reads.
 
 perl Rcorrector/run_rcorrector.pl -1 $R1 -2 $R2 -od /home/dgarcia/nas5/rna/raw_reads/${dir}/rcorrected -t ${OMP_NUM_THREADS}
 
@@ -96,6 +94,7 @@ fi
 ```
 
 ## Results: Steps 1-5 (fastqc, Rcorrector and trimmomatic)
+- approximate time to obtain results of 2 tissues ~ 1.5 GB (bad coverage) = 3.5 hours
 
 **1) Fast qc results:**
 - Sequence Duplication Levels seem to be high. However, I think this makes sense for RNA sequence data since there are going to be some more overexpressed genes and thus have duplicated sequences compared to others.
@@ -117,7 +116,9 @@ fi
 - After running this step I am left with reverse paired, reverse unpaired, foward paired and foward unpaired file.
 
  
+## Script: Steps 6 [Trinity](https://github.com/trinityrnaseq/trinityrnaseq)
 
+- Trinity assembles transcript sequences from Illumina RNA-Seq data.
 
 
 
