@@ -13,7 +13,7 @@ Need to update everything I have done so far:
 
 I have obtained RNA seq data from Illumina of two tissue samples: liver and kidney. Unfortunately, these samples are not from the same individual I used for the PacBio genome. However, it is an individual from the same species (*Helicops angulatus*) and same population (Orinoquian region - Meta, Colombia).
 
-Samples are: DGC-R-7-kidney_R1_001.fastq.gz, DGC-R-7-kidney_R2_001.fastq.gz, DGC-R-7-liver_R1_001.fastq.gz, DGC-R-7-liver_R2_001.fastq.gz and they each have a size of ~ 1.5GB
+Samples are: DGC-R-7-kidney_R1_001.fastq.gz, DGC-R-7-kidney_R2_001.fastq.gz, DGC-R-7-liver_R1_001.fastq.gz, DGC-R-7-liver_R2_001.fastq.gz and they each have a size of **~ 1.5GB**
 
 I am following the steps mentioned in: https://github.com/harvardinformatics/TranscriptomeAssemblyTools/tree/master and https://www.notion.so/RNA-seq-data-processing-cc1fcd681bf040bcb181ee9f68744d9a which are the following:
 
@@ -22,61 +22,96 @@ I am following the steps mentioned in: https://github.com/harvardinformatics/Tra
 3. remove read pairs where at least one read has been flagged by rCorrector as containing an erroneous kmer, and where it was not possible to correct the errors computationally
 4. remove read pairs where at least read contains an over-represented sequence
 5. perform high quality trimming with trimmomatic
-6. assemble reads with trinnity
+6. assemble reads with trinity
+
+I am running one script with PBS_ARRAY_INDEX that allows to run a large collection of PBS runs to be executed in one script. This is specified in the PBS -J 1-2 and with the ${PBS_ARRAY_INDEX}. This first script runs from step 1-5 in the above description (meaning trimming is not ran yet)
 
 
-### 1. Fastqc
+## Script: Steps 1-5 (fastqc, Rcorrector and trimmomatic)
 
 I run these analyses in the Huxley cluster of AMNH using a PBS script. Personal reminder: if needed this will need to be transferred to AMNH Mendel cluster (SLURM) which is where I have my PacBio genome assembly. 
 
 ```
 #!/bin/bash
-
-#PBS -N fastqc_rna
-#PBS -q batch
+#PBS -q batch 
+#PBS -l mem=20gb
 #PBS -m abe
 #PBS -M dgarcia@amnh.org
-#PBS -e /home/dgarcia/nas5/rna/fastqc
-#PBS -o /home/dgarcia/nas5/rna/fastqc
-#PBS -l nodes=1:ppn=28
-#PBS -l walltime=40:00:00
-
-module load fastqc-0.11.9
-
-fastqc /home/dgarcia/nas5/rna/DGC-R-7-liver_R1_001.fastq.gz \
-/home/dgarcia/nas5/rna/DGC-R-7-liver_R2_001.fastq.gz \
--o /home/dgarcia/nas5/rna/fastqc
-```
-And now the script for the kidney samples. For some reason, I was not able to run the fastqc of the 2 samples (liver and kidney) in the same script. This is some troubleshooting I must due to not have to run the same script mutiple times. 
-
-```
-#PBS -N fastqc_rna
+#PBS -l ncpus=8
 #PBS -q batch
-#PBS -m abe
-#PBS -M dgarcia@amnh.org
-#PBS -e /home/dgarcia/nas5/rna/fastqc
-#PBS -o /home/dgarcia/nas5/rna/fastqc
-#PBS -l nodes=1:ppn=28
-#PBS -l walltime=40:00:00
+#PBS -N rna_trinity
+#PBS -l walltime=100:00:00
+#PBS -J 1-2
 
-module load fastqc-0.11.9
+#READ PROCESSING
+source ~/.bash_profile
+export PATH=/home/dgarcia/nas4/bin/miniconda3/bin:$PATH
+export OMP_NUM_THREADS=8
+conda activate prepRNA #trimmomatic and rcorrector
+module load fastqc-0.11.9 perl-5.26.0 jre-1.8.0_251 Trinity-2.12.0 jellyfish-2.3.0 bowtie2-2.3.5.1
 
-fastqc /home/dgarcia/nas5/rna/DGC-R-7-kidney_R1_001.fastq.gz \
-/home/dgarcia/nas5/rna/DGC-R-7-kidney_R2_001.fastq.gz \
--o /home/dgarcia/nas5/rna/fastqc
+# indicating the working directory
+wd=/home/dgarcia/nas5/rna
+#changing to the working directory
+cd ${wd}
+#this file text has the names of the folder where I have the R1 and R2 fastq files of raw reads
+directories_file=directories.txt
+#PBS_ARRAY_INDEX allow a large collection of PBS runs to be executed in one script. This is specified in the PBS -J 11-13
+dir=$(sed -n "${PBS_ARRAY_INDEX}p" "$directories_file")
 
+echo ${PBS_ARRAY_INDEX}
+echo $dir
+R1=/home/dgarcia/nas5/rna/raw_reads/${dir}/*R1*
+R2=/home/dgarcia/nas5/rna/raw_reads/${dir}/*R2*
+
+echo $OMP_NUM_THREADS
+##1. fastqc
+
+fastqc -o fastqc $R1 $R2 -t ${OMP_NUM_THREADS}
+
+#2. kmer read corrections
+
+perl Rcorrector/run_rcorrector.pl -1 $R1 -2 $R2 -od /home/dgarcia/nas5/rna/raw_reads/${dir}/rcorrected -t ${OMP_NUM_THREADS}
+
+#3 correct other reads, python file from the github mentioned above
+
+if ls /home/dgarcia/nas5/rna/raw_reads/${dir}/rcorrected/*R1* 1> /dev/null 2>&1; then
+	mkdir ${wd}/raw_reads/${dir}/filtered
+	cd ${wd}/raw_reads/${dir}/filtered
+	python /home/dgarcia/nas5/rna/FilterPEfastq.py -1 ${wd}/raw_reads/${dir}/rcorrected/*R1*.fq.gz -2 ${wd}/raw_reads/${dir}/rcorrected/*R2*.fq.gz
+# -s ${wd}/transfer/${dir}/filtered
+	mv ${wd}/raw_reads/${dir}/rcorrected/unfixrm_* ${wd}/raw_reads/${dir}/filtered/
+fi
+
+#4. Trim reads
+
+if  ls /home/dgarcia/nas5/rna/raw_reads/${dir}/filtered/*_for_paired.fq.gz 1> /dev/null 2>&1; then
+	echo "ran trimming"
+elif ls /home/dgarcia/nas5/rna/raw_reads/${dir}/filtered/*R1* 1> /dev/null 2>&1; then
+	cd ${wd}/raw_reads/${dir}/filtered
+	name=$(echo *R1*| awk -F'unfixrm_|_R1' '{print $2}') # get a bash variable that is the name of the sample, taken from the directory, and retaining text prior to _
+	echo $name
+	trimmomatic  PE -threads ${OMP_NUM_THREADS} *R1*.fq.gz *R2*.fq.gz ${name}_for_paired.fq.gz ${name}_for_unpaired.fq.gz ${name}_rev_paired.fq.gz ${name}_rev_unpaired.fq.gz ILLUMINACLIP:/home/ddebaun/nas5/pseudo-it/TruSeq3-PE-2.fa:2:30:10:2:keepBothReads LEADING:3 TRAILING:3 MINLEN:36
+fi
 ```
-The results for the fastqc analysis of both the liver and kidney of *Helicops angulatus* seem to be of good quality. I am only observing possible problems in the: 
 
-1) Sequence Duplication Levels:
+## Results: Steps 1-5 (fastqc, Rcorrector and trimmomatic)
+
+**1) Fast qc results:**
+- Sequence Duplication Levels seem to be high. However, I think this makes sense for RNA sequence data since there are going to be some more overexpressed genes and thus have duplicated sequences compared to others.
 <img width="899" alt="Screenshot 2024-11-26 at 10 48 07 AM" src="https://github.com/user-attachments/assets/8b23d1ab-b353-4b61-9942-c577269d0a7e">
 
-2) Adaptor content: ~20% of the Illumina Universal Adapter
+-  Adaptor content: ~20% of the Illumina Universal Adapter.
+  
+**2) kmer read corrections:**
+- Table summarizing the reads purged and corrected after running rcorrector:
+- Around 15% of the reads were purged after correcting or eliminating bad quality reads.
+  
+![image](https://github.com/user-attachments/assets/b0069a03-c538-4072-9e60-545ab6bc062f)
 
 
-### 2. kmer-based read corrections with rCorrector
 
-See https://github.com/harvardinformatics/TranscriptomeAssemblyTools/tree/master and https://gigascience.biomedcentral.com/articles/10.1186/s13742-015-0089-y for original details on how this correcting step works. 
+
 
 
 
