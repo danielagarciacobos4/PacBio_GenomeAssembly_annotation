@@ -1,6 +1,9 @@
-# Genome Assembly with PacBio
+# Genome Assembly and RNA-seq Annotation
 
 The following pipeline will show the scripts and results obtained from a PacBio (SMRT CELL) genome assembly and RNA seq annotation for the South American aquatic snake *Helicops angulatus*. Depending of the resources and cluster capacity needed, some scripts are in the HUXLEY cluster (PBS scripting) and others are in the MENDEL cluster (SLURM- BATCH). 
+
+# 1. Genome assembly
+I sequenced the genome of Helicops angulatus from Orinoquia, Colombia. The tissue corresponds 
 
 
 Need to update everything I have done so far: 
@@ -9,10 +12,9 @@ Need to update everything I have done so far:
 - Busco analysis to check for completeness of the genome. Quality check of the assembly
 - *Merqury (I have not done this yet). Quality check of the assembly*
 
-# Annotation
-- Earl Grey: soft masking of the genome. This is a needed step for genome annotation (actually I believe this is the first step of genome annotation, but I have to check and confirm this statement). 
+# 2. Annotation: 
 
-## Rna Seq data 
+Earl Grey: soft masking of the genome. This is a needed step for genome annotation (actually I believe this is the first step of genome annotation, but I have to check and confirm this statement). 
 
 I have obtained RNA seq data from Illumina of two tissue samples: liver and kidney. Unfortunately, these samples are not from the same individual I used for the PacBio genome. However, it is an individual from the same species (*Helicops angulatus*) and same population (Orinoquian region - Meta, Colombia).
 
@@ -30,7 +32,7 @@ I am following the steps mentioned in: https://github.com/harvardinformatics/Tra
 I am running one script with PBS_ARRAY_INDEX that allows to run a large collection of PBS runs to be executed in one script. This is specified in the PBS -J 1-2 and with the ${PBS_ARRAY_INDEX}. This first script runs from step 1-5 in the above description (meaning trimming is not ran yet)
 
 
-## Script: Steps 1-5 (fastqc, Rcorrector and trimmomatic)
+## 2.1 Script: Steps 1-5 (fastqc, Rcorrector and trimmomatic)
 
 I run these analyses in the Huxley cluster of AMNH using a PBS script. Personal reminder: if needed this will need to be transferred to AMNH Mendel cluster (SLURM) which is where I have my PacBio genome assembly. 
 
@@ -119,7 +121,7 @@ fi
 - After running this step I am left with reverse paired, reverse unpaired, foward paired and foward unpaired file.
 
  
-## Script: Steps 6 [Trinity](https://github.com/trinityrnaseq/trinityrnaseq)
+## 2.2 Script: Steps 6 [Trinity](https://github.com/trinityrnaseq/trinityrnaseq)
 
 - Trinity assembles transcript sequences from Illumina RNA-Seq data. Take a look at the [wiki](https://github.com/trinityrnaseq/trinityrnaseq/wiki) page for full step by step of how trinity works.
 - path of the script: /home/dgarcia/nas5/rna
