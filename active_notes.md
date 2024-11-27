@@ -105,9 +105,20 @@ fi
   
 **2) kmer read corrections:**
 - Table summarizing the reads purged and corrected after running rcorrector:
-- Around 15% of the reads were purged after correcting or eliminating bad quality reads.
+- Around 15% of the reads were purged after correcting or eliminating bad quality reads (as a means of comparison, Dylan's RNA seq data purged ~7% of the reads).
   
 ![image](https://github.com/user-attachments/assets/b0069a03-c538-4072-9e60-545ab6bc062f)
+
+**3) correct other reads, python file from the github mentioned above:**
+- This step further corrects RNA reads. The results of this correction is a two file starting with the word unfixrm (e.g. unfixrm_kidney_Helicops_angulatus_IAvH-CT-36861_R2_001.cor.fq.gz). One for R1 and R2.
+  
+**#4. Trim reads**
+- This step trims the adaptors from library prep. After trimming adaptors I am left with paired reads of ~ 1 GB. This is very low-coverage reads, but this is the outcome of the initial sequencing resources requested (remember that the initial file is around ~1.5 GB - before running rcorrector).
+- After running this step I am left with reverse paired, reverse unpaired, foward paired and foward unpaired file.
+
+ 
+
+
 
 
 
