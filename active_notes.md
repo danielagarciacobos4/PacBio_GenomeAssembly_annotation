@@ -11,12 +11,36 @@ I sequenced the genome of *Helicops angulatus* from Orinoquia, Colombia. This co
 3) Busco analysis to check for completeness of the genome. Quality check of the assembly
 4) *Merqury (I have not done this yet). Quality check of the assembly*
 
-## 1.1 kmer analysis using jellyfish for raw reads [see](https://github.com/gmarcais/Jellyfish) 
+## 1.1 kmer analysis using jellyfish for raw reads 
+- [see full instructions](https://github.com/gmarcais/Jellyfish) 
 - path to the analysis: /home/dgarcia/nas5/PacBio
 - D6C18_Helicops_angulatus.hifireads.fastq.gz corresponds to the file with the raw reads.
 - Jellyfish is a tool for fast, memory-efficient counting of k-mers in DNA. A k-mer is a substring of length k, and counting the occurrences of all such substrings is a central step in many analyses of DNA sequences.
-- It outputs its k-mer counts in a binary format, which can be translated into a human-readable text format using the "jellyfish dump" command, or queried for specific k-mers with "jellyfish query". See the documentation for details.
+- It outputs its k-mer counts in a binary format, which can be translated into a human-readable text format using the "jellyfish dump" command, or queried for specific k-mers with "jellyfish query".
+- The command also includes a "jellyfish histo" which creates an histogram of k-mer occurrences that can be read in [GenomeScope](http://genomescope.org/)
 
+### 1.1 Script kmer analysis using jellyfish
+
+```
+#!/bin/bash
+#PBS -N kmer_dgc
+#PBS -q batch
+#PBS -S /bin/bash
+#PBS -l nodes=1:ppn=1
+#PBC -l mem=30GB
+#PBS -l ncpus=40
+#PBS -l walltime=50:00:00
+
+module load jellyfish-2.3.0
+cd /home/dgarcia/nas5/
+
+jellyfish count -C -m 21 -s 1000000000 -t 38 -o D6C18_Helicops_angulatus.hifireads.fastq.jf <(zcat D6C18_Helicops_angulatus.hifireads.fastq.gz)
+jellyfish histo D6C18_Helicops_angulatus.hifireads.fastq.jf -t 38 > D6C18_Helicops_angulatus.hifireads.fastq.histo
+```
+### 1.1 Results kmer analysis using jellyfish
+
+
+![Screenshot 2024-11-27 at 4 09 35 PM](https://github.com/user-attachments/assets/33bfc30c-dfe9-4f3b-ab17-f41de558ec50)
 
 
 # 2. Annotation: 
