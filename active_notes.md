@@ -118,7 +118,38 @@ fi
  
 ## Script: Steps 6 [Trinity](https://github.com/trinityrnaseq/trinityrnaseq)
 
-- Trinity assembles transcript sequences from Illumina RNA-Seq data.
+- Trinity assembles transcript sequences from Illumina RNA-Seq data. Take a look at the [wiki](https://github.com/trinityrnaseq/trinityrnaseq/wiki) page for full step by step of how trinity works.
+- path of the script: /home/dgarcia/nas5/rna
+- name of the script: trinity.sh
+
+```
+#!/bin/bash
+#PBS -q batch
+#PBS -l mem=100gb
+#PBS -m abe
+#PBS -M dgarcia@amnh.org
+#PBS -l ncpus=10
+#PBS -q batch
+#PBS -N trinityRNA
+#PBS -l walltime=100:00:00
+#PBS -J 1-2
+
+cd /home/dgarcia/nas5/rna
+module load perl-5.26.0 jre-1.8.0_251 Trinity-2.12.0 jellyfish-2.3.0 bowtie2-2.3.5.1
+
+directories_file=directories.txt
+dir=$(sed -n "${PBS_ARRAY_INDEX}p" "$directories_file")
+echo ${PBS_ARRAY_INDEX}
+echo $dir
+R1=/home/dgarcia/nas5/rna/raw_reads/${dir}/filtered/*for_paired*
+R2=/home/dgarcia/nas5/rna/raw_reads/${dir}/filtered/*rev_paired*
+mkdir trimmed_trinity_${dir}
+cd trimmed_trinity_${dir}
+#make sure max mem matches mem allocation up top
+Trinity --full_cleanup --seqType fq --left $R1 --right $R2 --CPU ${OMP_NUM_THREADS} --max_memory 100G --output trimmed_trinity_${dir}
+'''
+
+
 
 
 
