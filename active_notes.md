@@ -190,7 +190,12 @@ cd trimmed_trinity_${dir}
 Trinity --full_cleanup --seqType fq --left $R1 --right $R2 --CPU ${OMP_NUM_THREADS} --max_memory 100G --output trimmed_trinity_${dir}
 ```
 ## Results: Steps 6 (Trinity)
-- approximate time to obtain results of 2 tissues ~ 1.5 GB (bad coverage) - started Nov 27 at 2:00 pm finished...
+- approximate time to obtain results of 2 tissues ~ 1.5 GB (bad coverage)
+- time to run analysis for 2 tissues: 5 hours.
+- Obtained two files per tissue as results: 1) name_Trinity.fasta and 2) name_Trinity.fasta.gene_trans_map
+- each Trinity.fasta file weights ~ 100m (kidney) and ~56m (liver)
+- 
+
 
 
 
