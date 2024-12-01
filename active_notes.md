@@ -223,10 +223,17 @@ echo $dir
 
 busco -c $OMP_NUM_THREADS -f -i /nas5/dgarcia/rna/trimmed_trinity_${dir}/trimmed_trinity_${dir}.Trinity.fasta -o /nas5/dgarcia/rna_${dir}.busco -l sauropsida_odb10 -m transcriptome --offline --download_path /home/dgarcia/nas5/busco_downloads
 ```
+## 2.3 Results: Step 7 [BUSCO](https://busco.ezlab.org/)
+
+- Results for kidney:
+<img width="561" alt="Screenshot 2024-12-01 at 4 16 58 PM" src="https://github.com/user-attachments/assets/ea330f01-b73a-4c88-8d7c-8998ad2b2b91">
+
+- Results for liver:
+<img width="576" alt="Screenshot 2024-12-01 at 4 17 59 PM" src="https://github.com/user-attachments/assets/2711a62f-db5d-41b5-81a8-c59698046e58">
 
 
 
-
+  
 
 
 
