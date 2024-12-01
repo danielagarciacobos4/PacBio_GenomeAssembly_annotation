@@ -157,7 +157,7 @@ fi
 - After running this step I am left with reverse paired, reverse unpaired, foward paired and foward unpaired file.
 
  
-## 2.2 Script: Steps 6 [Trinity](https://github.com/trinityrnaseq/trinityrnaseq)
+## 2.2 Script: Step 6 [Trinity](https://github.com/trinityrnaseq/trinityrnaseq)
 
 - Trinity assembles transcript sequences from Illumina RNA-Seq data. Take a look at the [wiki](https://github.com/trinityrnaseq/trinityrnaseq/wiki) page for full step by step of how trinity works.
 - path of the script: /home/dgarcia/nas5/rna
@@ -189,12 +189,43 @@ cd trimmed_trinity_${dir}
 #make sure max mem matches mem allocation up top
 Trinity --full_cleanup --seqType fq --left $R1 --right $R2 --CPU ${OMP_NUM_THREADS} --max_memory 100G --output trimmed_trinity_${dir}
 ```
-## Results: Steps 6 (Trinity)
+## Results: Step 6 (Trinity)
 - approximate time to obtain results of 2 tissues ~ 1.5 GB (bad coverage)
 - time to run analysis for 2 tissues: 5 hours.
-- Obtained two files per tissue as results: 1) name_Trinity.fasta and 2) name_Trinity.fasta.gene_trans_map
+- obtained two files per tissue as results: 1) name_Trinity.fasta and 2) name_Trinity.fasta.gene_trans_map
 - each Trinity.fasta file weights ~ 100m (kidney) and ~56m (liver)
-- 
+
+## 2.3 Script: Step 7 [BUSCO](https://busco.ezlab.org/)
+- BUSCO estimates the completeness and redundancy of processed genomic data based on universal single-copy orthologs. Read complete paper [here](https://doi.org/10.1093/molbev/msab199)
+- script path and name: /nas5/dgarcia/rna/busco.sh
+- Run time: started at 12:51 pm (dec 1, 2023)..
+
+```
+#!/bin/bash
+#PBS -q batch 
+#PBS -l mem=30gb
+#PBS -m abe
+#PBS -M dgarcia@amnh.org
+#PBS -l ncpus=5
+#PBS -q batch
+#PBS -N busco_scores
+#PBS -l walltime=10:00:00
+#PBS -J 1-2
+
+module load busco-5.5.0
+export AUGUSTUS_CONFIG_PATH=/nas5/dgarcia/augustus-3.4.0/config
+cd /nas5/dgarcia/
+
+directories_file=rna/directories.txt
+dir=$(sed -n "${PBS_ARRAY_INDEX}p" "$directories_file")
+echo ${PBS_ARRAY_INDEX}
+echo $dir
+
+busco -c $OMP_NUM_THREADS -f -i /nas5/dgarcia/rna/trimmed_trinity_${dir}/trimmed_trinity_${dir}.Trinity.fasta -o /nas5/dgarcia/rna_${dir}.busco -l sauropsida_odb10 -m transcriptome --offline --download_path /home/dgarcia/nas5/busco_downloads
+```
+
+
+
 
 
 
