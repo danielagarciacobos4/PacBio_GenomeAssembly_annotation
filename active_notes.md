@@ -1,9 +1,6 @@
 # Genome Assembly and RNA-seq Annotation
 
-The following pipeline will show the scripts and results obtained from a PacBio (SMRT CELL) genome assembly and RNA seq annotation (still in process) for the South American aquatic snake *Helicops angulatus*. Depending on the resources and cluster capacity needed, some scripts are in the HUXLEY cluster (PBS scripting) and others are in the MENDEL cluster (SLURM- BATCH). Here is a nice picture of the species I chose to develop a high-quality annotated genome:
-
-![IMG_5229](https://github.com/user-attachments/assets/f335c39f-083c-406d-aab0-746dcfcf26fe)
-
+The following pipeline will show the scripts and results obtained from a PacBio (SMRT CELL) genome assembly and RNA seq annotation (still in process) for the South American aquatic snake *Helicops angulatus*. Depending on the resources and cluster capacity needed, some scripts are in the HUXLEY cluster (PBS scripting) and others are in the MENDEL cluster (SLURM- BATCH).
 
 # 1. Genome assembly
 
@@ -42,9 +39,17 @@ jellyfish histo D6C18_Helicops_angulatus.hifireads.fastq.jf -t 38 > D6C18_Helico
 ```
 ### 1.1 Results kmer analysis using jellyfish
 
-
 ![Screenshot 2024-11-27 at 4 09 35 PM](https://github.com/user-attachments/assets/33bfc30c-dfe9-4f3b-ab17-f41de558ec50)
 
+Interpretation of the results: 
+
+- Blue bars represent the distribution of k-mer counts (frequencies) across the sequencing dataset.
+- Sequencing error seems to be low, as shown by the orange line.
+- Approximate genome length of 1.3 Gbps.
+- Low heterozygosity
+- ~ 17X Coverage
+
+Overall the Kmer analysis and visualization with genome scope show that we have high-quality sequencing data with minimal errors, meaning we have good data to do a de novo genome assembly. 
 
 # 2. Annotation: 
 
