@@ -7,7 +7,7 @@ The following pipeline will show the scripts and results obtained from a PacBio 
 
 # 1. Genome assembly
 
-I sequenced the genome of *Helicops angulatus* from Orinoquia, Colombia. This corresponds to a liver sample collected in 2022 and preserved in ethanol at 96% (IAvH-CT, Instituto Alexander von Humboldt in Colombia). DNA extractions were made with a kit for high molecular-weight samples. The overall steps I did to check for the quality check of the reads and genome assembly are as follows: 
+I sequenced the genome of *Helicops angulatus* from Orinoquia, Colombia. This corresponds to a liver sample collected in 2022 and preserved in ethanol at 96% (IAvH-CT, Instituto Alexander von Humboldt in Colombia). DNA extractions were made with a kit for high molecular weight samples. The overall steps I did to check for the quality of the reads and genome assembly are as follows: 
 
 1) kmer analysis of raw reads: Quality check of the raw reads
 2) Hifiasm to assemble the genome (purging?)
