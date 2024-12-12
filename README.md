@@ -11,5 +11,5 @@ For the second section which involves the genome annotation pipeline, I will add
 Here is a nice picture of the species I chose to develop a high-quality annotated genome: 
 
 
-![IMG_5229](https://github.com/user-attachments/assets/27b3c5ed-6c79-4a0b-8a62-a3f32be5e566) ![IMG_6603](https://github.com/user-attachments/assets/c7e1136d-0745-4735-9386-2c26631e741f)
+![IMG_5229](https://github.com/user-attachments/assets/27b3c5ed-6c79-4a0b-8a62-a3f32be5e566)
 
