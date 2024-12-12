@@ -66,9 +66,9 @@ Overall the Kmer analysis and visualization with genome scope show that we have 
 ### 1.2 Script genome assembly using Hifiasm
 
 Important flags in the script: 
--o : output name of the assembled genome
--t : number of threads I want the cluster to use
-path to the raw reads the file
+- -o : output name of the assembled genome
+- -t : number of threads I want the cluster to use
+- path to the raw reads the file
 
 ```
 #!/bin/sh
@@ -99,8 +99,14 @@ These are the files obtained after the genome assembly:
 
 Check out what each file means on the following [link](https://hifiasm.readthedocs.io/en/latest/interpreting-output.html). For the following steps we will use the Helicops_angulatus_NP4.asm.bp.p_ctg.gfa file which is the primary genome assembly. 
 
-## 1.3 Busco analysis of assembled genome
+## 1.3 [Busco](https://busco.ezlab.org/) analysis of assembled genome
 
+- BUSCO estimates the completeness and redundancy of processed genomic data based on universal single-copy orthologs. Read complete paper [here](https://doi.org/10.1093/molbev/msab199)
+- Analysis performed in the MENDEL cluster
+- path for BUSCO analysis: /home/dgarcia/mendel-nas1/PacBio/Helicops_angulatus_Aug2024/busco
+
+
+### 1.3 Results from Busco analysis of assembled
 
 
 
