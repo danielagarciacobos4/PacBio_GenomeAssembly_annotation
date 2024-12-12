@@ -10,7 +10,7 @@ I sequenced the genome of *Helicops angulatus* from Orinoquia, Colombia. This co
 2) Genome assembly using Hifiasm
 3) Busco analysis to check for completeness of the genome
 4) Genome statistics with QUAST
-5) *Merqury (I have not done this yet). Quality check of the assembly*
+5) *Merqury (I have not done this yet but it is another quality check of the assembly)*
 
 ## 1.1 kmer analysis using jellyfish for raw reads 
 - [see full instructions](https://github.com/gmarcais/Jellyfish)
@@ -152,16 +152,20 @@ busco -m genome -i $Helicops_ang -o BUSCO_H.angulatus -l sauropsida_odb10 -f --m
 ### 1.4 Script Genome statistics with QUAST
 
 Important flags in the script:
-- -o <output_dir>
-- -r <reference genome path>
+- -o: output directory
+- -r: reference genome path
 
 ```
 python quast.py -o /home/dgarcia/nas4/phd/QUAST -r /home/dgarcia/nas4/phd/QUAST/Helicops_angulatus_NP4.asm.bp.p_ctg.fa
-
 ```
 
 ### 1.5 Results Genome statistics with QUAST
 
+- total genome size: ~ 2.1 GB
+- N50: 44.6 Mbp
+- L50: 9
+
+<img width="429" alt="image" src="https://github.com/user-attachments/assets/2b91e51b-6d7a-42e3-8697-a16fcb8d5f90" />
 
 
 # 2. Annotation: 
