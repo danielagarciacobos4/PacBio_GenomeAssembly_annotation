@@ -170,14 +170,16 @@ python quast.py -o /home/dgarcia/nas4/phd/QUAST -r /home/dgarcia/nas4/phd/QUAST/
 
 # 2. Annotation: 
 
-For now this section will include the steps two main steps that are needed and will biuld up to the genome annotation wth RNA seq: 
+For now, this section will include the steps two main steps that are needed and will build up to the genome annotation with RNA seq: 
 
 1) Soft mask the genome with Earl Grey
 2) Assemble RNA seq for two tissues (liver and kidney)
+3) Busco scores for assembled RNA
 
 ## 2.1 Earl Grey: soft masking the genome
 
-Earl Grey: soft masking of the genome. This is a needed step for genome annotation (actually I believe this is the first step of genome annotation, but I have to check and confirm this statement). 
+- Earl Grey is a full-automated transposable element (TE) annotation pipeline
+
 
 ## 2.2 Assemble RNA seq with Trinity 
 
