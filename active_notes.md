@@ -170,7 +170,16 @@ python quast.py -o /home/dgarcia/nas4/phd/QUAST -r /home/dgarcia/nas4/phd/QUAST/
 
 # 2. Annotation: 
 
+For now this section will include the steps two main steps that are needed and will biuld up to the genome annotation wth RNA seq: 
+
+1) Soft mask the genome with Earl Grey
+2) Assemble RNA seq for two tissues (liver and kidney)
+
+## 2.1 Earl Grey: soft masking the genome
+
 Earl Grey: soft masking of the genome. This is a needed step for genome annotation (actually I believe this is the first step of genome annotation, but I have to check and confirm this statement). 
+
+## 2.2 Assemble RNA seq with Trinity 
 
 I have obtained RNA seq data from Illumina of two tissue samples: liver and kidney. Unfortunately, these samples are not from the same individual I used for the PacBio genome. However, it is an individual from the same species (*Helicops angulatus*) and same population (Orinoquian region - Meta, Colombia).
 
