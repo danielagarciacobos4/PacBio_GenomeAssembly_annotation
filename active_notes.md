@@ -69,6 +69,7 @@ Important flags in the script:
 - -o : output name of the assembled genome
 - -t : number of threads I want the cluster to use
 - path to the raw reads the file
+- running time: ~48 hours
 
 ```
 #!/bin/sh
@@ -104,9 +105,37 @@ Check out what each file means on the following [link](https://hifiasm.readthedo
 - BUSCO estimates the completeness and redundancy of processed genomic data based on universal single-copy orthologs. Read complete paper [here](https://doi.org/10.1093/molbev/msab199)
 - Analysis performed in the MENDEL cluster
 - path for BUSCO analysis: /home/dgarcia/mendel-nas1/PacBio/Helicops_angulatus_Aug2024/busco
+- I had to install busco in a conda environment named BUSCO
 
+### 1.3 Script for Busco analysis of assembled genome
 
-### 1.3 Results from Busco analysis of assembled
+Important flags in the script: 
+- -m genome: specifies we are doing a busco analysis on a genome (busco can also be calculated for transcriptome or protein)
+- -o BUSCO_H.angulatus: output name
+- -i $Helicops_ang: specifies the input file, which is the variable Helicops_ang pointing to the genome assembly
+- -l sauropsida_odb10: Specifies the lineage dataset to use. sauropsida_odb10 is the dataset for Sauropsida (reptiles and birds), indicating that the genome is being analyzed for completeness using a reference dataset relevant to reptiles
+- -f: forces overwritting of existing output
+- --metaeuk: Uses MetaEuk (MetaGeneAnnotator) as the gene predictor for BUSCO analysis
+- --offline: Runs BUSCO in offline mode. The clusters in AMNH DO NOT allow to connect to the internet. For this reason it is importang to previously download the sauropsida_odb10 database.
+
+```
+#!/bin/sh
+#SBATCH --job-name busco_helicops
+#SBATCH --nodes=10
+#SBATCH --mem=100gb
+#SBATCH --time=144:00:00
+#SBATCH --mail-type=ALL
+#SBATCH --mail-user=dgarcia@amnh.org
+
+source ~/.bash_profile
+conda activate BUSCO
+
+Helicops_ang="/home/dgarcia/mendel-nas1/PacBio/Helicops_angulatus_Aug2024/assembly/assemblystats_NP4/Helicops_angulatus_NP4.asm.bp.p_ctg.fa"
+busco -m genome -i $Helicops_ang -o BUSCO_H.angulatus -l sauropsida_odb10 -f --metaeuk --offline --download_path /home/dgarcia/mendel-nas1/PacBio/Helicops_angulatus_Aug2024/busco
+
+```
+
+### 1.3 Results for Busco analysis of assembled genome
 
 
 
