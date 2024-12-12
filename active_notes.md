@@ -178,7 +178,51 @@ For now, this section will include the steps two main steps that are needed and 
 
 ## 2.1 Earl Grey: soft masking the genome
 
-- Earl Grey is a full-automated transposable element (TE) annotation pipeline
+- Given an input genome, Earl Grey will run through numerous steps to identify, curate, and annotate transposable elements (TEs).
+- see full documentation of Earl Grey [here](https://github.com/TobyBaril/EarlGrey)
+- This analysis was performed in the MENDEL cluster of AMNH
+- path to the folder containing scripts and results: /home/dgarcia/mendel-nas1/PacBio/Helicops_angulatus_Aug2024/earl_grey
+
+### 2.1 Script Earl Grey: soft masking the genome
+
+Important flags of the script: 
+- -g: Specifies the input genome file: /home/dgarcia/mendel-nas1/PacBio/Helicops_angulatus_Aug2024/assembly_final_18Oct2024/Helicops_angulatus_NP4.asm.bp.p_ctg.fa
+- -s: Specifies the session name or identifier for this analysis
+- -t: Specifies the number of threads (parallel processes) to use.
+- -0: Specifies the output directory
+
+```
+#!/bin/sh
+
+#SBATCH --job-name earlgrey2
+#SBATCH --nodes=1
+#SBATCH --tasks-per-node=48
+#SBATCH --mem=150gb
+#SBATCH --time=300:00:00
+#SBATCH --mail-type=ALL
+#SBATCH --mail-user=dgarcia@amnh.org
+
+#activate earlgrey with mamba before submitting
+
+source ~/.bash_profile
+export PATH=/home/dgarcia/mendel-nas1/miniforge3/bin:$PATH
+mamba init
+mamba activate earlgrey2
+
+genome="/home/dgarcia/mendel-nas1/PacBio/Helicops_angulatus_Aug2024/assembly_final_18Oct2024/Helicops_angulatus_NP4.asm.bp.p_ctg.fa"
+
+earlGrey -g $genome -s Helicops_angulatus_18Oct2024 -t $SLURM_NTASKS_PER_NODE -d yes -o /home/dgarcia/mendel-nas1/PacBio/Helicops_angulatus_Aug2024/earl_grey
+
+##This in modeling my repeats, masking them, and then analysis compared to known paired database
+```
+
+### 2.1 Results Earl Grey: soft masking the genome
+
+- the result of this analysis is a soft masked genome.
+- It also gives this pie chart to have an idea of the repeat elements detected and identified in the genome:
+- In this case, we ca see that this is a highly repetitive genome.
+
+<img width="1000" alt="Screenshot 2024-12-12 at 12 38 52 PM" src="https://github.com/user-attachments/assets/e29bb427-c4a7-4736-bc82-70d4a4649c05" />
 
 
 ## 2.2 Assemble RNA seq with Trinity 
@@ -204,7 +248,7 @@ I am following the steps mentioned in: https://github.com/harvardinformatics/Tra
 I am running one script with PBS_ARRAY_INDEX that allows to run a large collection of PBS runs to be executed in one script. This is specified in the PBS -J 1-2 and with the ${PBS_ARRAY_INDEX}. This first script runs from step 1-5 in the above description (meaning trnity is not ran yet)
 
 
-## 2.1 Script: Steps 1-5 (fastqc, Rcorrector and trimmomatic)
+## 2.2.1 Script: Steps 1-5 (fastqc, Rcorrector and trimmomatic)
 
 I run these analyses in the Huxley cluster of AMNH using a PBS script. Personal reminder: if needed this will need to be transferred to AMNH Mendel cluster (SLURM) which is where I have my PacBio genome assembly. 
 
@@ -293,7 +337,7 @@ fi
 - After running this step I am left with reverse paired, reverse unpaired, foward paired and foward unpaired file.
 
  
-## 2.2 Script: Step 6 [Trinity](https://github.com/trinityrnaseq/trinityrnaseq)
+## 2.2.2 Script: Step 6 [Trinity](https://github.com/trinityrnaseq/trinityrnaseq)
 
 - Trinity assembles transcript sequences from Illumina RNA-Seq data. Take a look at the [wiki](https://github.com/trinityrnaseq/trinityrnaseq/wiki) page for full step by step of how trinity works.
 - path of the script: /home/dgarcia/nas5/rna
@@ -325,13 +369,13 @@ cd trimmed_trinity_${dir}
 #make sure max mem matches mem allocation up top
 Trinity --full_cleanup --seqType fq --left $R1 --right $R2 --CPU ${OMP_NUM_THREADS} --max_memory 100G --output trimmed_trinity_${dir}
 ```
-## Results: Step 6 (Trinity)
+## 2.2.2 Results: Step 6 (Trinity)
 - approximate time to obtain results of 2 tissues ~ 1.5 GB (bad coverage)
 - time to run analysis for 2 tissues: 5 hours.
 - obtained two files per tissue as results: 1) name_Trinity.fasta and 2) name_Trinity.fasta.gene_trans_map
 - each Trinity.fasta file weights ~ 100m (kidney) and ~56m (liver)
 
-## 2.3 Script: Step 7 [BUSCO](https://busco.ezlab.org/)
+## 2.2.3 Script: Step 7 [BUSCO](https://busco.ezlab.org/)
 - BUSCO estimates the completeness and redundancy of processed genomic data based on universal single-copy orthologs. Read complete paper [here](https://doi.org/10.1093/molbev/msab199)
 - script path and name: /nas5/dgarcia/rna/busco.sh
 - Run time: started at 12:51 pm (dec 1, 2023)..
@@ -359,7 +403,7 @@ echo $dir
 
 busco -c $OMP_NUM_THREADS -f -i /nas5/dgarcia/rna/trimmed_trinity_${dir}/trimmed_trinity_${dir}.Trinity.fasta -o /nas5/dgarcia/rna_${dir}.busco -l sauropsida_odb10 -m transcriptome --offline --download_path /home/dgarcia/nas5/busco_downloads
 ```
-## 2.3 Results: Step 7 [BUSCO](https://busco.ezlab.org/)
+## 2.2.3 Results: Step 7 [BUSCO](https://busco.ezlab.org/)
 
 - Results for kidney:
 <img width="561" alt="Screenshot 2024-12-01 at 4 16 58 PM" src="https://github.com/user-attachments/assets/ea330f01-b73a-4c88-8d7c-8998ad2b2b91">
