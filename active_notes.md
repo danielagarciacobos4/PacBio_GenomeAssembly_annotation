@@ -1,6 +1,9 @@
 # Genome Assembly and RNA-seq Annotation
 
-The following pipeline will show the scripts and results obtained from a PacBio (SMRT CELL) genome assembly and RNA seq annotation for the South American aquatic snake *Helicops angulatus*. Depending of the resources and cluster capacity needed, some scripts are in the HUXLEY cluster (PBS scripting) and others are in the MENDEL cluster (SLURM- BATCH). 
+The following pipeline will show the scripts and results obtained from a PacBio (SMRT CELL) genome assembly and RNA seq annotation (still in process) for the South American aquatic snake *Helicops angulatus*. Depending on the resources and cluster capacity needed, some scripts are in the HUXLEY cluster (PBS scripting) and others are in the MENDEL cluster (SLURM- BATCH). Here is a nice picture of the species I chose to develop a high-quality annotated genome:
+
+![IMG_5229](https://github.com/user-attachments/assets/f335c39f-083c-406d-aab0-746dcfcf26fe)
+
 
 # 1. Genome assembly
 
