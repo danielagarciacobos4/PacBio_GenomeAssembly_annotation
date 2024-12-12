@@ -8,8 +8,8 @@ I sequenced the genome of *Helicops angulatus* from Orinoquia, Colombia. This co
 
 1) kmer analysis of raw reads: Quality check of the raw reads
 2) Genome assembly using Hifiasm
-3) Busco analysis to check for completeness of the genome.
-4) Quality check of the assembly
+3) Busco analysis to check for completeness of the genome
+4) Genome statistics with QUAST
 5) *Merqury (I have not done this yet). Quality check of the assembly*
 
 ## 1.1 kmer analysis using jellyfish for raw reads 
@@ -137,6 +137,15 @@ busco -m genome -i $Helicops_ang -o BUSCO_H.angulatus -l sauropsida_odb10 -f --m
 
 ### 1.3 Results for Busco analysis of assembled genome
 
+- Good Busco scores!
+- Completness score could be better (ideally we are looking for higher than 96%)
+- Very low percentage of duplicates 1.6%. This is good because I dont have to clean up duplicates
+
+<img width="484" alt="Screenshot 2024-12-12 at 10 52 03 AM" src="https://github.com/user-attachments/assets/b146de7e-80d4-4db9-8ff1-1d0d890c20bd" />
+
+## 1.4 Genome statistics with QUAST
+
+- 
 
 
 # 2. Annotation: 
