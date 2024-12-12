@@ -7,12 +7,14 @@ The following pipeline will show the scripts and results obtained from a PacBio 
 I sequenced the genome of *Helicops angulatus* from Orinoquia, Colombia. This corresponds to a liver sample collected in 2022 and preserved in ethanol at 96% (IAvH-CT, Instituto Alexander von Humboldt in Colombia). DNA extractions were made with a kit for high molecular weight samples. The overall steps I did to check for the quality of the reads and genome assembly are as follows: 
 
 1) kmer analysis of raw reads: Quality check of the raw reads
-2) Hifiasm to assemble the genome (purging?)
-3) Busco analysis to check for completeness of the genome. Quality check of the assembly
-4) *Merqury (I have not done this yet). Quality check of the assembly*
+2) Genome assembly using Hifiasm
+3) Busco analysis to check for completeness of the genome.
+4) Quality check of the assembly
+5) *Merqury (I have not done this yet). Quality check of the assembly*
 
 ## 1.1 kmer analysis using jellyfish for raw reads 
-- [see full instructions](https://github.com/gmarcais/Jellyfish) 
+- [see full instructions](https://github.com/gmarcais/Jellyfish)
+- Analysis performed in HUXLEY cluster 
 - path to the analysis: /home/dgarcia/nas5/PacBio
 - D6C18_Helicops_angulatus.hifireads.fastq.gz corresponds to the file with the raw reads.
 - Jellyfish is a tool for fast, memory-efficient counting of k-mers in DNA. A k-mer is a substring of length k, and counting the occurrences of all such substrings is a central step in many analyses of DNA sequences.
@@ -50,6 +52,57 @@ Interpretation of the results:
 - ~ 17X Coverage
 
 Overall the Kmer analysis and visualization with genome scope show that we have high-quality sequencing data with minimal errors, meaning we have good data to do a de novo genome assembly. 
+
+## 1.2 Genome assembly using Hifiasm
+
+- See full documentation of [Hifiasm](https://hifiasm.readthedocs.io/en/latest/#)
+- Analysis performed in the MENDEL cluster
+- Raw files obtained from the sequencing facility Azenta are ~ 27 Gb
+- Path to raw files: /home/dgarcia/mendel-nas1/PacBio/Helicops_angulatus_Aug2024/fastqc_raw/D6C18_Helicops_angulatus.hifireads.fastq.gz
+- Hifiasm is a fast haplotype-resolved de novo assembler for PacBio HiFi reads.
+- Hifiasm produces primary/alternate assemblies or partially phased assemblies only with HiFi reads.
+- Since MENDEL does not have the Hifiasm installed, I created a conda environment called "assembly" that contained the Hifiasm package. 
+
+### 1.2 Script genome assembly using Hifiasm
+
+Important flags in the script: 
+-o : output name of the assembled genome
+-t : number of threads I want the cluster to use
+path to the raw reads the file
+
+```
+#!/bin/sh
+#SBATCH --job-name=hifiasm_NP_DGC_2
+#SBATCH --nodes=1
+#SBATCH --mem=170gb
+#SBATCH --cpus-per-task=30
+#SBATCH --time=40:00:00
+#SBATCH --mail-type=ALL
+#SBATCH --mail-user=dgarcia@amnh.org
+#SBATCH --output=hifiasm_assembly_NP4-%j-%x.out
+
+
+#conda init
+
+source ~/.bash_profile
+conda activate assembly
+
+hifiasm -o Helicops_angulatus_NP4.asm -t 30 /home/dgarcia/mendel-nas1/PacBio/Helicops_angulatus_Aug2024/fastqc_raw/D6C18_Helicops_angulatus.hifireads.fastq.gz
+
+```
+
+### 1.2 Results genome assembly using Hifiasm
+
+These are the files obtained after the genome assembly: 
+
+<img width="982" alt="Screenshot 2024-12-12 at 9 18 50 AM" src="https://github.com/user-attachments/assets/11fb4315-7d67-42b8-9f0b-ce936b5cda0c" />
+
+Check out what each file means on the following [link](https://hifiasm.readthedocs.io/en/latest/interpreting-output.html). For the following steps we will use the Helicops_angulatus_NP4.asm.bp.p_ctg.gfa file which is the primary genome assembly. 
+
+## 1.3 Busco analysis of assembled genome
+
+
+
 
 # 2. Annotation: 
 
@@ -242,7 +295,8 @@ busco -c $OMP_NUM_THREADS -f -i /nas5/dgarcia/rna/trimmed_trinity_${dir}/trimmed
 
 
   
-
+# References: 
+- Haoyu Cheng, Gregory T. Concepcion, Xiaowen Feng, Haowen Zhang & Heng Li. Haplotype-resolved de novo assembly using phased assembly graphs with hifiasm. Nature Methods. (2021).
 
 
 
