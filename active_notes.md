@@ -145,8 +145,15 @@ busco -m genome -i $Helicops_ang -o BUSCO_H.angulatus -l sauropsida_odb10 -f --m
 
 ## 1.4 Genome statistics with QUAST
 
+- QUAST stands for QUality ASsessment Tool. It evaluates genome/metagenome assemblies by computing various metrics.
+- Analysis performed in the HUXLEY cluster
 - 
 
+
+```
+python quast.py [options] <contig_file(s)>
+
+```
 
 # 2. Annotation: 
 
