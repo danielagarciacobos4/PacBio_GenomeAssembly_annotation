@@ -225,7 +225,7 @@ earlGrey -g $genome -s Helicops_angulatus_18Oct2024 -t $SLURM_NTASKS_PER_NODE -d
 <img width="1000" alt="Screenshot 2024-12-12 at 12 38 52 PM" src="https://github.com/user-attachments/assets/e29bb427-c4a7-4736-bc82-70d4a4649c05" />
 
 
-## 2.2 Assemble RNA seq with Trinity 
+## 2.2 Assemble RNA seq with Trinity (Need to update this with new reads sequenced on june 2025)
 
 I have obtained RNA seq data from Illumina of two tissue samples: liver and kidney. Unfortunately, these samples are not from the same individual I used for the PacBio genome. However, it is an individual from the same species (*Helicops angulatus*) and same population (Orinoquian region - Meta, Colombia).
 
@@ -410,6 +410,44 @@ busco -c $OMP_NUM_THREADS -f -i /nas5/dgarcia/rna/trimmed_trinity_${dir}/trimmed
 
 - Results for liver:
 <img width="576" alt="Screenshot 2024-12-01 at 4 17 59 PM" src="https://github.com/user-attachments/assets/2711a62f-db5d-41b5-81a8-c59698046e58">
+
+
+
+# Funannotate
+
+### Installation: 
+
+1) Create a conda environment named funannotate. I installed with mamba because it is faster
+```
+mamba create -n funannotate -c conda-forge -c bioconda funannotate
+
+```
+Keep in mind: 
+
+- <img width="1074" height="690" alt="Screenshot 2025-08-31 at 3 30 15 PM" src="https://github.com/user-attachments/assets/0a631334-81ea-42eb-81a3-57ed656db891" />
+- Path of folder: /home/dgarcia/mendel-nas1/PacBio/Helicops_angulatus_Aug2024/funannotate/
+- Structure of folder: 
+
+<img width="730" height="591" alt="Screenshot 2025-08-31 at 4 00 56 PM" src="https://github.com/user-attachments/assets/39e001b3-7298-4ea4-890e-1d97a2b6e000" />
+
+2) Download the Funannotate databases:
+```
+mkdir -p $CONDA_PREFIX/etc/conda/activate.d $CONDA_PREFIX/etc/conda/deactivate.d
+echo 'export FUNANNOTATE_DB=/home/dgarcia/mendel-nas1/PacBio/Helicops_angulatus_Aug2024/funannotate/02_db/funannotate_db' > $CONDA_PREFIX/etc/conda/activate.d/funannotate.sh
+echo 'unset FUNANNOTATE_DB' > $CONDA_PREFIX/etc/conda/deactivate.d/funannotate.sh
+```
+3) Make sure we downloaded everything okay, and run a test to make sure the installation worked okay
+
+```
+funannotate database --show
+
+funannotate test -t all --cpus 8
+```
+
+If the test is successful it shows something like this: 
+<img width="1596" height="857" alt="Screenshot 2025-08-31 at 5 03 31 PM" src="https://github.com/user-attachments/assets/14703f38-6b80-4c41-818d-01ebaf8eb6f6" />
+<img width="839" height="215" alt="Screenshot 2025-08-31 at 5 03 59 PM" src="https://github.com/user-attachments/assets/9d6edd31-dd56-4aba-a3cd-4944350390e5" />
+
 
 
 
