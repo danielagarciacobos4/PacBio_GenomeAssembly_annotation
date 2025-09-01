@@ -475,8 +475,30 @@ echo "$TRINITY_HOME"
 "$TRINITY_HOME"/Trinity --version
 ```
 
-5) 
+5) Problems with jellyfish?
 
+```
+# activa funannotate
+source /mendel-nas1/dgarcia/miniforge3/etc/profile.d/conda.sh
+conda activate funannotate
+
+# añade Trinity + Jellyfish del env trinity215 al PATH al activar funannotate
+mkdir -p "$CONDA_PREFIX/etc/conda/activate.d" "$CONDA_PREFIX/etc/conda/deactivate.d"
+
+cat > "$CONDA_PREFIX/etc/conda/activate.d/trinity_path.sh" <<'EOF'
+export TRINITY_HOME="/mendel-nas1/dgarcia/miniforge3/envs/trinity215/bin"
+export TRINITYHOME="$TRINITY_HOME"
+export PATH="$TRINITY_HOME:$PATH"
+EOF
+
+echo 'unset TRINITY_HOME; unset TRINITYHOME' > "$CONDA_PREFIX/etc/conda/deactivate.d/trinity_path.sh"
+
+# recarga y verifica
+conda deactivate && conda activate funannotate
+which Trinity
+which jellyfish
+jellyfish --version
+```
 
 
 
