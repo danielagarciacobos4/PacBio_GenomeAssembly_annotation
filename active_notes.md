@@ -448,6 +448,35 @@ If the test is successful it shows something like this:
 <img width="1596" height="857" alt="Screenshot 2025-08-31 at 5 03 31 PM" src="https://github.com/user-attachments/assets/14703f38-6b80-4c41-818d-01ebaf8eb6f6" />
 <img width="839" height="215" alt="Screenshot 2025-08-31 at 5 03 59 PM" src="https://github.com/user-attachments/assets/9d6edd31-dd56-4aba-a3cd-4944350390e5" />
 
+4) We need to install the Trinity package separately. After installing Trinity, we must link the path to our funnanotate environment
+
+```
+mamba create -n trinity215 -c bioconda -c conda-forge trinity=2.15.2 -y
+
+conda deactivate
+
+conda activate funannotate
+
+# crea hooks para definir TRINITY_HOME al activar el env
+mkdir -p "$CONDA_PREFIX/etc/conda/activate.d" "$CONDA_PREFIX/etc/conda/deactivate.d"
+
+cat > "$CONDA_PREFIX/etc/conda/activate.d/trinity.sh" <<'EOF'
+# Trinity instalado en un env aparte (bioconda lo pone en bin)
+export TRINITY_HOME="/mendel-nas1/dgarcia/miniforge3/envs/trinity215/bin"
+export TRINITYHOME="$TRINITY_HOME"
+EOF
+
+echo 'unset TRINITY_HOME; unset TRINITYHOME' > "$CONDA_PREFIX/etc/conda/deactivate.d/trinity.sh"
+
+# recarga y verifica
+conda deactivate
+conda activate funannotate
+echo "$TRINITY_HOME"
+"$TRINITY_HOME"/Trinity --version
+```
+
+5) 
+
 
 
 
