@@ -5,6 +5,7 @@ The following pipeline will show the scripts and results obtained from a PacBio 
 # Notes to me (Paths to final results of assembly and annotation)
 
 Since I have moved things around in the cluster after obtaining the final results, these are the final paths of important outputs of the pipeline: 
+
 	- Hifiasm Genome assembly: /home/dgarcia/mendel-nas1/PacBio/Helicops_angulatus_Aug2024/hifiasm_assembly/No_purging_assembly/assembly_final_18Oct2024/Helicops_angulatus_NP4.asm.bp.p_ctg.fa
 
 # 1. Genome assembly
