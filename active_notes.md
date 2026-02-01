@@ -70,6 +70,9 @@ Important flags in the script:
 - -t : number of threads I want the cluster to use
 - path to the raw reads the file
 - running time: ~48 hours
+- Final genome assembly reported here did not include purging duplicates flag (-l2)
+  	- Not a high heterozygote genome.
+  	- Busco of assembly shows a low percentage of duplicates. Thus pruging may colapse regiosn of true variation.
 
 ```
 #!/bin/sh
