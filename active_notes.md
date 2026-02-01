@@ -2,6 +2,11 @@
 
 The following pipeline will show the scripts and results obtained from a PacBio (SMRT CELL) genome assembly and RNA seq annotation (still in process) for the South American aquatic snake *Helicops angulatus*. Depending on the resources and cluster capacity needed, some scripts are in the HUXLEY cluster (PBS scripting) and others are in the MENDEL cluster (SLURM- BATCH).
 
+# Notes to me (Paths to final results of assembly and annotation)
+
+Since I have moved things around in the cluster after obtaining the final results, these are the final paths of important outputs of the pipeline: 
+	- Hifiasm Genome assembly: /home/dgarcia/mendel-nas1/PacBio/Helicops_angulatus_Aug2024/hifiasm_assembly/No_purging_assembly/assembly_final_18Oct2024/Helicops_angulatus_NP4.asm.bp.p_ctg.fa
+
 # 1. Genome assembly
 
 I sequenced the genome of *Helicops angulatus* from Orinoquia, Colombia. This corresponds to a liver sample collected in 2022 and preserved in ethanol at 96% (IAvH-CT, Instituto Alexander von Humboldt in Colombia). DNA extractions were made with a kit for high molecular weight samples. The overall steps I did to check for the quality of the reads and genome assembly are as follows: 
